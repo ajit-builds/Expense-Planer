@@ -32,11 +32,6 @@ const LoginPage = () => {
     }
   };
 
-  const fillDemoUser = (demoEmail, demoPass) => {
-    setEmail(demoEmail);
-    setPassword(demoPass);
-  };
-
   return (
     <div className="min-h-screen bg-slate-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8 font-sans">
       <div className="sm:mx-auto sm:w-full sm:max-w-md text-center">
@@ -107,29 +102,6 @@ const LoginPage = () => {
               <ArrowRight className="w-4 h-4" />
             </button>
           </form>
-
-          {/* Quick Demo Login Option */}
-          <div className="mt-6 pt-6 border-t border-slate-100">
-            <div className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3 text-center">
-              Quick Demo Accounts
-            </div>
-            <div className="grid grid-cols-2 gap-2">
-              <button
-                type="button"
-                onClick={() => fillDemoUser('ajit@example.com', 'password123')}
-                className="py-2 px-3 text-xs font-medium text-slate-700 bg-slate-100 hover:bg-slate-200 rounded-lg transition-colors text-center border border-slate-200"
-              >
-                Ajit Singh (Main)
-              </button>
-              <button
-                type="button"
-                onClick={() => fillDemoUser('userb@example.com', 'password123')}
-                className="py-2 px-3 text-xs font-medium text-slate-700 bg-slate-100 hover:bg-slate-200 rounded-lg transition-colors text-center border border-slate-200"
-              >
-                User B (Test Isolation)
-              </button>
-            </div>
-          </div>
 
           <div className="mt-6 text-center">
             <p className="text-sm text-slate-600">

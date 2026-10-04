@@ -1,0 +1,348 @@
+{
+  "info": {
+    "_postman_id": "e8a1d2f0-1234-4567-89ab-cdef01234567",
+    "name": "Personal Expense Tracker API",
+    "description": "Complete REST API Postman Collection for Personal Expense Tracker with JWT Authentication & Ownership Authorization",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:5001/api",
+      "type": "string"
+    },
+    {
+      "key": "token",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "expenseId",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "1. Authentication",
+      "item": [
+        {
+          "name": "Register User",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Ajit Singh\",\n  \"email\": \"ajit@example.com\",\n  \"password\": \"password123\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/register",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "register"]
+            },
+            "description": "Registers a new user, hashes password, and returns a JWT token."
+          }
+        },
+        {
+          "name": "Login User",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"ajit@example.com\",\n  \"password\": \"password123\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "login"]
+            },
+            "description": "Authenticates user and returns JWT token."
+          }
+        },
+        {
+          "name": "Get Current Profile (Me)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/auth/me",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "me"]
+            },
+            "description": "Fetches current authenticated user details."
+          }
+        }
+      ]
+    },
+    {
+      "name": "2. Expenses CRUD",
+      "item": [
+        {
+          "name": "Create Expense",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"amount\": 500,\n  \"category\": \"Food\",\n  \"date\": \"2026-10-04\",\n  \"note\": \"Lunch with friends\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/expenses",
+              "host": ["{{baseUrl}}"],
+              "path": ["expenses"]
+            },
+            "description": "Creates a new expense for the authenticated user."
+          }
+        },
+        {
+          "name": "Get All Expenses",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/expenses",
+              "host": ["{{baseUrl}}"],
+              "path": ["expenses"]
+            },
+            "description": "Fetches all expenses belonging to the authenticated user."
+          }
+        },
+        {
+          "name": "Filter Expenses by Category",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/expenses?category=Food",
+              "host": ["{{baseUrl}}"],
+              "path": ["expenses"],
+              "query": [
+                {
+                  "key": "category",
+                  "value": "Food"
+                }
+              ]
+            },
+            "description": "Filters expenses by category using backend Mongoose query."
+          }
+        },
+        {
+          "name": "Filter Expenses by Date Range",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/expenses?from=2026-10-01&to=2026-10-31",
+              "host": ["{{baseUrl}}"],
+              "path": ["expenses"],
+              "query": [
+                {
+                  "key": "from",
+                  "value": "2026-10-01"
+                },
+                {
+                  "key": "to",
+                  "value": "2026-10-31"
+                }
+              ]
+            },
+            "description": "Filters expenses by date range using backend Mongoose query."
+          }
+        },
+        {
+          "name": "Get Single Expense by ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/expenses/{{expenseId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["expenses", "{{expenseId}}"]
+            },
+            "description": "Fetches single expense owned by the authenticated user."
+          }
+        },
+        {
+          "name": "Update Expense",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"amount\": 650,\n  \"category\": \"Food\",\n  \"note\": \"Updated lunch with friends and dessert\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/expenses/{{expenseId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["expenses", "{{expenseId}}"]
+            },
+            "description": "Updates an existing expense owned by the user."
+          }
+        },
+        {
+          "name": "Delete Expense",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/expenses/{{expenseId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["expenses", "{{expenseId}}"]
+            },
+            "description": "Deletes expense owned by the user."
+          }
+        }
+      ]
+    },
+    {
+      "name": "3. Aggregation & Summary",
+      "item": [
+        {
+          "name": "Get Monthly Aggregation Summary",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/expenses/summary?month=2026-10",
+              "host": ["{{baseUrl}}"],
+              "path": ["expenses", "summary"],
+              "query": [
+                {
+                  "key": "month",
+                  "value": "2026-10"
+                }
+              ]
+            },
+            "description": "Calculates category-wise spending totals using MongoDB Aggregation ($match, $group, $sum)."
+          }
+        }
+      ]
+    },
+    {
+      "name": "4. Security Tests",
+      "item": [
+        {
+          "name": "Unauthorized Request (No Token)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/expenses",
+              "host": ["{{baseUrl}}"],
+              "path": ["expenses"]
+            },
+            "description": "Expect 401 Unauthorized."
+          }
+        },
+        {
+          "name": "Access Another User Expense (Forbidden)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/expenses/666666666666666666666666",
+              "host": ["{{baseUrl}}"],
+              "path": ["expenses", "666666666666666666666666"]
+            },
+            "description": "Expect 404 Not Found (or 403 Forbidden) enforcing strict ownership."
+          }
+        },
+        {
+          "name": "Invalid Amount Validation",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"amount\": -100,\n  \"category\": \"Food\",\n  \"date\": \"2026-10-04\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/expenses",
+              "host": ["{{baseUrl}}"],
+              "path": ["expenses"]
+            },
+            "description": "Expect 400 Bad Request with validation error message."
+          }
+        }
+      ]
+    }
+  ]
+}
